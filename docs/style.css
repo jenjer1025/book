@@ -18,3 +18,6 @@ nav.pn span{flex:1}nav.pn .c{text-align:center}nav.pn .r{text-align:right}
 footer{text-align:center;color:var(--muted);font-size:13px;padding:2rem}
 .intro{margin:2rem 0;padding:1.2rem 1.5rem;border-left:3px solid currentColor;opacity:.92}
 .intro h2{font-size:1.1em;margin-top:0}
+.video{margin:1.5rem 0 2rem}.vw{position:relative;aspect-ratio:16/9;background:#000;border-radius:6px;overflow:hidden}
+.vw iframe,.vw video{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video figcaption{text-align:center;font-size:.85em;opacity:.7;margin-top:.4rem}

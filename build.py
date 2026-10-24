@@ -5,6 +5,18 @@ R = pathlib.Path(__file__).parent
 cfg = json.loads((R/"config.json").read_text(encoding="utf-8"))
 out = R/"docs"; shutil.rmtree(out, ignore_errors=True); out.mkdir()
 shutil.copy(R/"style.css", out/"style.css")
+if (R/"videos").is_dir(): shutil.copytree(R/"videos", out/"videos")
+def video_html(v):
+    m = re.search(r"(?:youtu\.be/|youtube\.com/(?:watch\?v=|embed/|shorts/))([\w-]{11})", v)
+    if m:
+        inner = f'<iframe src="https://www.youtube-nocookie.com/embed/{m.group(1)}" title="影片" allowfullscreen loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"></iframe>'
+    else:
+        src = v if "/" in v else f"videos/{v}"
+        poster = re.sub(r"\.mp4$", ".jpg", src)
+        pa = f' poster="{html.escape(poster)}"' if not src.startswith("http") and (out/poster).exists() else ""
+        inner = f'<video controls preload="metadata" playsinline{pa}><source src="{html.escape(src)}" type="video/mp4">您的瀏覽器不支援影片播放。</video>'
+    return f'<figure class="video"><div class="vw">{inner}</div><figcaption>影片版</figcaption></figure>'
+
 JS = """<script>
 const d=document.documentElement,s=localStorage;
 if(s.theme)d.dataset.theme=s.theme;if(s.fs)d.style.setProperty('--fs',s.fs+'px');
@@ -27,7 +39,10 @@ for f in sorted((R/"chapters").glob("*.md")):
     lines = f.read_text(encoding="utf-8").splitlines()
     title = lines[0].lstrip("# ").strip() if lines and lines[0].startswith("#") else f.stem
     paras = []
-    for ln in (lines[1:] if lines and lines[0].startswith("#") else lines):
+    body_lines = lines[1:] if lines and lines[0].startswith("#") else lines
+    while body_lines and re.match(r"\s*video\s*[:：]", body_lines[0]):
+        paras.append(video_html(body_lines.pop(0).split(":",1)[-1].split("：",1)[-1].strip()))
+    for ln in body_lines:
         t = ln.strip()
         if not t: continue
         if re.fullmatch(r"[＊*\s　]+", t) or t in ("***", "---"):

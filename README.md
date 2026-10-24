@@ -18,6 +18,23 @@
    ```
 （網站由 GitHub Pages 從 `main` 分支的 `/docs` 資料夾發佈。）
 
+## 序與首頁簡介
+- 序放在 `chapters/00-序.md`。檔名以 `00` 開頭會標示為「序」、網址為 `preface.html`，並排在第一章之前。
+- 首頁簡介放在 `intro.md`，每一行是一個段落。修改後執行 `python3 build.py` 再推送。
+
+## 在章節加入影片
+在章節檔第一行（`# 章名`）的下一行加上：
+```
+video: 影片網址或檔名
+```
+- YouTube：直接貼網址，例如 `video: https://www.youtube.com/watch?v=XXXXXXXXXXX`（會以 youtube-nocookie 嵌入）。
+- 自己的 MP4：把檔案放進 `videos/` 資料夾（檔名建議用英文，例如 `chapter-02.mp4`），再寫 `video: chapter-02.mp4`。若有同名的 `.jpg`（如 `chapter-02.jpg`），會自動當作封面圖。
+- 影片會顯示在章名下方、內文上方，並標示「影片版」。
+- 建議先把影片壓縮成 720p、40MB 以下（GitHub 單檔上限 100MB）：
+  ```
+  ffmpeg -i 原檔.mp4 -vf scale=-2:720 -c:v libx264 -crf 26 -c:a aac -b:a 96k -movflags +faststart videos/chapter-02.mp4
+  ```
+
 ## 修改書名／作者
 編輯 `config.json` 的 `title`、`author`、`description`，再執行 `python3 build.py` 並照上面第 5 步推送。
 
