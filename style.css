@@ -21,3 +21,4 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:2rem}
 .video{margin:1.5rem 0 2rem}.vw{position:relative;aspect-ratio:16/9;background:#000;border-radius:6px;overflow:hidden}
 .vw iframe,.vw video{position:absolute;inset:0;width:100%;height:100%;border:0}
 .video figcaption{text-align:center;font-size:.85em;opacity:.7;margin-top:.4rem}
+.toc li.ch{font-weight:700;border-bottom:none;padding-top:1.4rem}.toc li.sub2{padding-left:1.5em}

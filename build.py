@@ -38,8 +38,10 @@ for f in sorted((R/"chapters").glob("*.md")):
     if not pre: n += 1
     lines = f.read_text(encoding="utf-8").splitlines()
     title = lines[0].lstrip("# ").strip() if lines and lines[0].startswith("#") else f.stem
-    paras = []
+    paras = []; chap = ""
     body_lines = lines[1:] if lines and lines[0].startswith("#") else lines
+    while body_lines and re.match(r"\s*chapter\s*[:：]", body_lines[0]):
+        chap = re.split(r"[:：]", body_lines.pop(0), maxsplit=1)[1].strip()
     while body_lines and re.match(r"\s*video\s*[:：]", body_lines[0]):
         paras.append(video_html(body_lines.pop(0).split(":",1)[-1].split("：",1)[-1].strip()))
     for ln in body_lines:
@@ -50,15 +52,20 @@ for f in sorted((R/"chapters").glob("*.md")):
         else:
             cls = ' class="q"' if t[0] in "「『" else ""
             paras.append(f"<p{cls}>{html.escape(t)}</p>")
-    chs.append(("preface.html" if pre else f"chapter-{n:02d}.html", title, "\n".join(paras), "序" if pre else f"第 {n} 章"))
-for i, (fn, title, body, _) in enumerate(chs):
+    chs.append(("preface.html" if pre else f"chapter-{n:02d}.html", title, "\n".join(paras), "序" if pre else f"第 {n} 章", chap))
+for i, (fn, title, body, _, chap) in enumerate(chs):
     prev = f'<a href="{chs[i-1][0]}">← {html.escape(chs[i-1][1])}</a>' if i else ""
     nxt = f'<a href="{chs[i+1][0]}">{html.escape(chs[i+1][1])} →</a>' if i+1 < len(chs) else ""
     nav = f'<nav class="pn"><span>{prev}</span><span class="c"><a href="index.html">目錄</a></span><span class="r">{nxt}</span></nav>'
-    (out/fn).write_text(page(f"{title}｜{cfg['title']}", f"<h1>{html.escape(title)}</h1>\n{body}\n{nav}"), encoding="utf-8")
-toc = "".join(f'<li><span class="n">{lab}</span><a href="{fn}">{html.escape(t)}</a></li>' for fn, t, _, lab in chs)
+    (out/fn).write_text(page(f"{title}｜{cfg['title']}", (f"<p class='sub'>{html.escape(chap)}</p>" if chap else "") + f"<h1>{html.escape(title)}</h1>\n{body}\n{nav}"), encoding="utf-8")
+toc = ""; last = None
+for fn, t, _, lab, chap in chs:
+    if chap and chap != last: toc += f'<li class="ch">{html.escape(chap)}</li>'
+    last = chap
+    toc += f'<li{" class=sub2" if chap else ""}>' + (f'<span class="n">{lab}</span>' if not chap else "") + f'<a href="{fn}">{html.escape(t)}</a></li>'
+
 ip = R/"intro.md"
 intro = "".join(f"<p>{html.escape(l.strip())}</p>" for l in ip.read_text(encoding="utf-8").splitlines() if l.strip()) if ip.exists() else ""
 intro = f"<section class='intro'><h2>《{html.escape(cfg['title'])}》簡介</h2>{intro}</section>" if intro else ""
 (out/"index.html").write_text(page(cfg["title"], f"<h1>{html.escape(cfg['title'])}</h1><p class='sub'>{html.escape(cfg['author'])}</p>{intro}<h2 style='font-size:1.1em;margin-top:2.5rem'>目錄</h2><ul class='toc'>{toc}</ul>"), encoding="utf-8")
-print(f"完成：{len(chs)} 章 → docs/")
+print(f"完成：{len(chs)} 頁 → docs/")
