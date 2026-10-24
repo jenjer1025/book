@@ -1,0 +1,18 @@
+:root{--bg:#faf7f0;--fg:#2b2925;--muted:#8a8375;--accent:#9a4f2d;--line:#e4ddcf;--fs:19px}
+[data-theme=dark]{--bg:#1c1b19;--fg:#e2ddd2;--muted:#9a9384;--accent:#d99a72;--line:#3a3833}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Noto Serif TC","Source Han Serif TC","PMingLiU",serif;font-size:var(--fs);line-height:2;transition:background .3s,color .3s}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.bar{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;padding:.5rem 1rem;background:var(--bg);border-bottom:1px solid var(--line);font-size:15px;z-index:9}
+.bar button{background:none;border:1px solid var(--line);color:var(--fg);border-radius:6px;padding:.2rem .6rem;margin-left:.3rem;cursor:pointer;font-family:inherit}
+main{max-width:36em;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+h1{font-size:1.7em;text-align:center;letter-spacing:.1em;margin:1rem 0 2.5rem;line-height:1.5}
+.sub{text-align:center;color:var(--muted);margin-top:-1.5rem}
+p{margin:0 0 .9em;text-indent:2em;text-align:justify}
+p.q{text-indent:0}
+.break{text-align:center;color:var(--muted);letter-spacing:1em;margin:2.5em 0;text-indent:0}
+.toc{list-style:none;padding:0;margin-top:2rem}.toc li{border-bottom:1px dashed var(--line);padding:.7rem 0}
+.toc .n{color:var(--muted);margin-right:1em;font-size:.85em}
+nav.pn{display:flex;justify-content:space-between;gap:1rem;margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85em}
+nav.pn span{flex:1}nav.pn .c{text-align:center}nav.pn .r{text-align:right}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:2rem}
