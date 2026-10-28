@@ -67,5 +67,5 @@ for fn, t, _, lab, chap in chs:
 ip = R/"intro.md"
 intro = "".join(f"<p>{html.escape(l.strip())}</p>" for l in ip.read_text(encoding="utf-8").splitlines() if l.strip()) if ip.exists() else ""
 intro = f"<section class='intro'><h2>《{html.escape(cfg['title'])}》簡介</h2>{intro}</section>" if intro else ""
-(out/"index.html").write_text(page(cfg["title"], f"<h1>{html.escape(cfg['title'])}</h1><p class='sub'>{html.escape(cfg['author'])}</p>{intro}<h2 style='font-size:1.1em;margin-top:2.5rem'>目錄</h2><ul class='toc'>{toc}</ul>"), encoding="utf-8")
+(out/"index.html").write_text(page(cfg["title"], f"<h1>{html.escape(cfg['title'])}</h1><p class='sub'>{html.escape(cfg['author'])}</p>{intro}<section class='intro'><h2>導讀影片｜水滴之心．教改洋流</h2>{video_html('https://youtu.be/uRhy4a-gQuU')}</section><h2 style='font-size:1.1em;margin-top:2.5rem'>目錄</h2><ul class='toc'>{toc}</ul>"), encoding="utf-8")
 print(f"完成：{len(chs)} 頁 → docs/")
